@@ -19,3 +19,5 @@ npm run build
 ```
 npm run lint
 ```
+
+### NB! under plugins insert your own api key into buttercms.js you also need to register at buttercms.com to use this code (or code around the buttercms api :) )
