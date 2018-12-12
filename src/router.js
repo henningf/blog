@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
 import BlogPost from '@/views/BlogPost'
+import CreatePost from '@/views/CreatePost'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/post/:slug',
       name: 'blog-post',
       component: BlogPost
+    },
+    {
+      path: '/createpost',
+      name: 'create-post',
+      component: CreatePost
     }
   ]
 })
