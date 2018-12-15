@@ -77,6 +77,7 @@
 import Editor from '@tinymce/tinymce-vue'
 import axios from 'axios'
 export default {
+  name: 'Post',
   data () {
     return {
       blogpost: {
@@ -124,15 +125,6 @@ export default {
         this.blogpost = response.data
       })
     }
-  },
-  watch: {
-    $route (to, from) {
-      this.getPost()
-    }
-  },
-  created () {
-    this.getPost()
-    this.snackbar = true
   }
 }
 </script>

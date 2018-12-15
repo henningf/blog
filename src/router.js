@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/views/Home'
 import BlogPost from '@/views/BlogPost'
 import CreatePost from '@/views/CreatePost'
+import EditPost from '@/views/EditPost'
 
 Vue.use(Router)
 
@@ -35,7 +36,7 @@ export default new Router({
     {
       path: '/editpost/:slug',
       name: 'edit-post',
-      component: CreatePost
+      component: EditPost
     }
   ]
 })
