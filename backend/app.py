@@ -12,14 +12,15 @@ blog_posts = []
 class BlogPost(Resource):
     def get(self, post_name):
         post_name = next(filter(lambda x: x['post_name'] == post_name, blog_posts), None)
-        return {'post_name' : post_name}, 200 if post_name else 404
+        return {'blogpost' : post_name}, 200 if post_name else 404
 
 
     def post(self, post_name):
         if next(filter(lambda x: x['post_name'] == post_name, blog_posts), None) is not None:
             return {'message': '%s already exists' %post_name}, 400
         data = request.get_json()
-        blog_post = {'post_name' : post_name, 'post_content' : data['post_content']}
+        blog_post = {'post_name' : post_name, 'header_text' : data['header_text'], \
+          'activation_date' : data['activation_date'], 'front_page_text' : data['front_page_text'], 'blog_body' : data['blog_body'] }
         blog_posts.append(blog_post)
         return blog_post, 201
 

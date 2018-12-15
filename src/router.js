@@ -26,9 +26,15 @@ export default new Router({
       name: 'blog-post',
       component: BlogPost
     },
+    // Will find a way to merge these into one
     {
       path: '/createpost',
       name: 'create-post',
+      component: CreatePost
+    },
+    {
+      path: '/editpost/:slug',
+      name: 'edit-post',
       component: CreatePost
     }
   ]
