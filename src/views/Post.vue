@@ -1,6 +1,6 @@
 <template>
 <!-- -->
-<v-container fluid grid-list-md>
+<v-container fluid grid-list-md ref='blogpost_ref'>
     <v-flex xs7>
           <v-text-field
             v-model='blogpost.post_name'
@@ -76,6 +76,7 @@
 <script>
 import Editor from '@tinymce/tinymce-vue'
 import axios from 'axios'
+
 export default {
   name: 'Post',
   data () {
@@ -122,7 +123,7 @@ export default {
       var postName = this.$route.params.slug
       var posturl = 'http://127.0.0.1:5000/post/' + postName
       axios.get(posturl).then(response => {
-        this.blogpost = response.data
+        this.blogpost = response.data.blogpost
       })
     }
   }
