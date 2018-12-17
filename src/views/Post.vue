@@ -77,6 +77,20 @@
 import Editor from '@tinymce/tinymce-vue'
 import axios from 'axios'
 
+// Import tinymce and script
+import tinymce from 'tinymce/tinymce'
+// import tinymce theme
+import 'tinymce/themes/modern/theme'
+// Import plugins
+import 'tinymce/plugins/paste'
+import 'tinymce/plugins/link'
+
+// Initialize the app
+tinymce.init({
+  selector: '#tiny',
+  plugins: ['paste', 'link']
+})
+
 export default {
   name: 'Post',
   data () {
@@ -105,7 +119,8 @@ export default {
   },
   components: {
     'editor': Editor,
-    'axios': axios
+    'axios': axios,
+    'tinymce': tinymce
   },
   methods: {
     postBlogEntry () {
