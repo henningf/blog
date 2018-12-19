@@ -76,7 +76,6 @@
 <script>
 import Editor from '@tinymce/tinymce-vue'
 import axios from 'axios'
-
 // Import tinymce and script
 import tinymce from 'tinymce/tinymce'
 // import tinymce theme
@@ -87,7 +86,10 @@ import 'tinymce/plugins/link'
 
 // Initialize the app
 tinymce.init({
-  selector: '#tiny',
+  selector: 'textarea',
+  toolbar1: 'formatselect',
+  height: 500,
+  theme: 'modern',
   plugins: ['paste', 'link']
 })
 
@@ -111,16 +113,13 @@ export default {
       text: 'Hello, I\'m a snackbar',
       menu: false,
       modal: false,
-      menu2: false,
-      tinyOptions: {
-        'height': 500
-      }
+      menu2: false
     }
   },
   components: {
-    'editor': Editor,
+    // 'tinymce': tinymce,
     'axios': axios,
-    'tinymce': tinymce
+    'editor': Editor
   },
   methods: {
     postBlogEntry () {

@@ -15,7 +15,6 @@
     <v-footer>
       <span>&copy; 2018 Henning Fjellheim</span>
       <v-spacer></v-spacer>
-      <span>Powered with butterCMS</span>
     </v-footer>
   </v-app>
 </template>
