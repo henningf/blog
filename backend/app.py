@@ -1,13 +1,55 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
+from flask import send_from_directory
+import os
+
+IMAGE_FOLDER = 'IMAGES/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
+app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
+
 blog_posts = []
+images = []
+
+
+
+class Images(Resource):
+    """
+    Pointers to image will be stored in a database,
+    the images will be stored and served from disk.
+
+    Note, the post DOES NOT store info in database yet
+
+    PS: Need to harden this code, as it is not safe as of now.
+    """
+    def get(self, name):
+        return send_from_directory(app.config['IMAGE_FOLDER'],
+                               name)
+ 
+    def post(self):
+        if 'file' not in request.files:
+            return {"Error": "No file in request"}, 404
+        image_file = request.files['file']
+        name = image_file.filename
+        image_file.seek(0)
+        image_file.save(os.path.join(app.config['IMAGE_FOLDER'], name))
+        return {"image saved": name}, 200
+ 
+    def delete(self, name):
+        os.remove(os.path.join(app.config['IMAGE_FOLDER'], name))
+        return {"image deleted ": name}, 200
+
+    # Using this to check for allowed extensions
+    def allowed_file(self, filename):
+        return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
 
 class BlogPost(Resource):
     def get(self, post_name):
@@ -39,5 +81,6 @@ class PostList(Resource):
 
 api.add_resource(BlogPost, '/post/<string:post_name>')
 api.add_resource(PostList, '/posts')
+api.add_resource(Images, '/image', '/image/<string:name>')
 
 app.run(port=5000)
