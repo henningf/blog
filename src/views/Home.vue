@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { butter } from '@/plugins/buttercms'
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -38,6 +38,22 @@ export default {
   },
   methods: {
     getPosts () {
+      // rewrite this, at first just return all posts this function needs to be written in the backend.
+      axios.get('http://127.0.0.1:5000/posts')
+      .then(function (response) {
+    // handle success
+    console.log(response);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  })
+    }
+    /*
+    getPosts () {
       butter.post.list({
         page: 1,
         page_size: 10
@@ -45,6 +61,7 @@ export default {
         // console.log(res.data)
         this.posts = res.data.data
       })
+      */
     },
     getCategories () {
       butter.category.list()
