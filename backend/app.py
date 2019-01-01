@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask import send_from_directory
@@ -14,7 +14,21 @@ api = Api(app)
 
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
 
-blog_posts = []
+blog_posts = [{"ID": "1", "Title": "my first blogpost","Slug": "my-first-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my first blogpost", "Created_at":  "2018-12-15T12:36:28.363Z"},
+{"ID": "2","Title": "my second blogpost","Slug": "my-second-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my second blogpost", "Created_at":  "2018-12-16T12:36:28.363Z"},
+{"ID": "3","Title": "my third blogpost","Slug": "my-third-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my third blogpost", "Created_at":  "2018-12-17T12:36:28.363Z"},
+{"ID": "4","Title": "my fourth blogpost","Slug": "my-fourth-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my fourth blogpost", "Created_at":  "2018-12-18T12:36:28.363Z"},
+{"ID": "5","Title": "my fifth blogpost","Slug": "my-fifth-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my fifth blogpost", "Created_at":  "2018-12-19T12:36:28.363Z"}]
 images = []
 
 
@@ -52,12 +66,18 @@ class Images(Resource):
 
 
 class BlogPost(Resource):
-    def get(self, post_name):
+    def get(self, slug):
+        """
+        Takes slug input and returns blogpost
+        """
         post_name = next(filter(lambda x: x['post_name'] == post_name, blog_posts), None)
         return {'blogpost' : post_name}, 200 if post_name else 404
 
 
-    def post(self, post_name):
+    def post(self):
+        """
+        This will need to be rewritten, won't take post as input anymore.
+        """
         if next(filter(lambda x: x['post_name'] == post_name, blog_posts), None) is not None:
             return {'message': '%s already exists' %post_name}, 400
         data = request.get_json()
@@ -74,13 +94,16 @@ class BlogPost(Resource):
 
 
 class PostList(Resource):
+    """
+    Returns a list of posts, this will be updated later
+    """
     def get(self):
-        return {'blog_posts': blog_posts}
+        return jsonify({'blog_posts': blog_posts})
 
 
 
-api.add_resource(BlogPost, '/post/<string:post_name>')
-api.add_resource(PostList, '/posts')
+api.add_resource(BlogPost, '/post', '/post/<string:post_name>')
+api.add_resource(PostList, '/api/v1.0/posts')
 api.add_resource(Images, '/image', '/image/<string:name>')
 
 app.run(port=5000)
