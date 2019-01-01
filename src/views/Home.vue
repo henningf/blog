@@ -48,7 +48,7 @@ export default {
       // rewrite this, at first just return all posts this function needs to be written in the backend.
       axios
         .get('http://127.0.0.1:5000/api/v1.0/posts')
-        .then(response => (this.posts = response))
+        .then(response => (this.posts = response.data.blog_posts))
         .catch(function (error) {
           // handle error
           console.log(error)
