@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask import send_from_directory
+from flask_pymongo import PyMongo
 import os
+import datetime
 
 IMAGE_FOLDER = 'IMAGES/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
@@ -13,6 +15,9 @@ CORS(app)
 api = Api(app)
 
 app.config['IMAGE_FOLDER'] = IMAGE_FOLDER
+# Setup local mongodb store
+app.config['MONGO_URI'] = "mongodb://localhost"
+mongo = PyMongo(app)
 
 blog_posts = [{"ID": "1", "Title": "my first blogpost","Slug": "my-first-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
 "feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
@@ -78,6 +83,20 @@ class BlogPost(Resource):
         """
         This will need to be rewritten, won't take post as input anymore.
         """
+        data = request.get_json()
+        # Need to rewrite this to check "some more"
+        if data.get('Title', None) is not None and data.get('Body', None) is not None:
+        # Some sort of check so that I don't duplicate posts.
+            slug = { "Slug": str(data.get('Title')).replace(' ','-')}
+            jsondata = data.get_json()
+            Created_at = { "Created_at" : datetime.datetime.utcnow()}
+            jsondata.append(slug, Created_at)
+            mongo.db.blog_post.insert_one(jsondata)
+            # Really I should return the slug name.. ?
+            return jsonify({'ok': True, 'message': 'Post created successfully!'}), 200
+        else:
+            return jsonify({'ok': False, 'message': 'Bad request parameters!'}), 400
+        """
         if next(filter(lambda x: x['post_name'] == post_name, blog_posts), None) is not None:
             return {'message': '%s already exists' %post_name}, 400
         data = request.get_json()
@@ -85,6 +104,7 @@ class BlogPost(Resource):
           'activation_date' : data['activation_date'], 'front_page_text' : data['front_page_text'], 'blog_body' : data['blog_body'] }
         blog_posts.append(blog_post)
         return blog_post, 201
+        """
 
     def delete(self, blog_post):
         # Create new list that removes the name from the list

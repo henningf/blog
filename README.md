@@ -20,4 +20,6 @@ npm run build
 npm run lint
 ```
 
-### NB! under plugins insert your own api key into buttercms.js you also need to register at buttercms.com to use this code (or code around the buttercms api :) )
+### Install mongodb for backend
+
+### NB!!! This is a work in progress with a python backend that saves to a mongodb database, you'll need to install mongodb yourself and I make no promise that the code won't brake :-)
