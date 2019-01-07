@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home'
-import BlogPost from '@/views/BlogPost'
+import ShowPost from '@/views/ShowPost'
 import CreatePost from '@/views/CreatePost'
 import EditPost from '@/views/EditPost'
 
@@ -24,8 +24,8 @@ export default new Router({
     },
     {
       path: '/post/:slug',
-      name: 'blog-post',
-      component: BlogPost
+      name: 'show-post',
+      component: ShowPost
     },
     // Will find a way to merge these into one
     {
