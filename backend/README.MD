@@ -13,6 +13,8 @@
 # Picture
 * [x] Add possibility to save picture
 * [ ] Check out what kind of response is needed for this
+* [ ] Move savedir etc. out of picture class
 
 # Login
+* [x] Create a login class
 * [ ] Add some login functunality
