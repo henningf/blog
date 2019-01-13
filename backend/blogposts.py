@@ -4,6 +4,24 @@ from bson.json_util import dumps
 import json, datetime
 from db import MONGO_POSTS as mongo_posts
 
+"""
+blog_posts = [{"ID": "1", "Title": "my first blogpost","Slug": "my-first-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my first blogpost", "Created_at":  "2018-12-15T12:36:28.363Z"},
+{"ID": "2","Title": "my second blogpost","Slug": "my-second-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my second blogpost", "Created_at":  "2018-12-16T12:36:28.363Z"},
+{"ID": "3","Title": "my third blogpost","Slug": "my-third-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my third blogpost", "Created_at":  "2018-12-17T12:36:28.363Z"},
+{"ID": "4","Title": "my fourth blogpost","Slug": "my-fourth-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my fourth blogpost", "Created_at":  "2018-12-18T12:36:28.363Z"},
+{"ID": "5","Title": "my fifth blogpost","Slug": "my-fifth-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
+"feature_image": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/intermediary/f/65a25b7b-5ce1-488b-a377-d71689d07659/d1xmvaz-11288f67-c6c2-4330-a075-74e288310327.jpg",
+"Feature_text": "This is my fifth blogpost", "Created_at":  "2018-12-19T12:36:28.363Z"}]
+"""
+
 class BlogPost(Resource):
     """
     Class for blogposts, used to create, update or delete single blogpost.
