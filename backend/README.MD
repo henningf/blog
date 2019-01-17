@@ -18,3 +18,7 @@
 # Login
 * [x] Create a login class
 * [ ] Add some login functunality
+* [ ] Add userlogin
+* [ ] Add useradd functionality
+* [ ] Add userdel functionality
+* [ ] Add logout functionality
