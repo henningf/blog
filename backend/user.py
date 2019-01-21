@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse
 from flask_jwt_extended import (create_access_token, create_refresh_token, 
 jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 import hashlib
-from db import MONGO_USERS as mongo_users
+from db import MONGO_BLACKLISTED_TOKENS, MONGO_USERS as mongo_users
 
 parser = reqparse.RequestParser()
 parser.add_argument('username', help='This field cannot be blank', required = True)
@@ -15,8 +15,9 @@ def _hash_password(password):
         '''
         takes password as input, returns salted password.
         '''
-        password_salted = str(password) + password_salt
-        hashed_password = str(hashlib.sha512(password_salted).hexdigest())
+        password_salted = str(password) + str(password_salt)
+        unicode_salted = password_salted.encode('utf-8')
+        hashed_password = str(hashlib.sha512(unicode_salted).hexdigest())
         return hashed_password
 
 class UserRegistration(Resource):
@@ -53,19 +54,54 @@ class UserLogin(Resource):
             return {'message': 'Wrong credentials'}
       
 class UserLogoutAccess(Resource):
+    @jwt_required
     def post(self):
-        return {'message': 'User logout'}
+        jti = get_raw_jwt()['jti']
+        try:
+            if not MONGO_BLACKLISTED_TOKENS.db.posts.find_one({'token': jti}):
+                MONGO_BLACKLISTED_TOKENS.db.post.insert_one({'token': jti})
+                return {'message': 'Access token has been revoked'}
+            else:
+                return {'message': 'Access token already revoked'}
+        except:
+            return {'message': 'Something went wrong'}, 500
       
       
 class UserLogoutRefresh(Resource):
+    @jwt_refresh_token_required
     def post(self):
-        return {'message': 'User logout'}
+        jti = get_raw_jwt()['jti']
+        try:
+            revoked_token = RevokedTokenModel(jti)
+            revoked_token.add()
+            return {'message': 'Refresh token has been revoked'}
+        except:
+            return {'message': 'something went wrong'}, 500
+
+class RevokedTokenModel():
+    '''
+    This class takes input of jti, needs to clean this up,
+    Should add tokens to blacklist and check if tokens are blacklisted
+    '''
+    def __init__(self, jti):
+        self.jti = jti
+
+    def add(self):
+        MONGO_BLACKLISTED_TOKENS.db.post.insert_one({'token': self.jti})
+
+    def is_jti_blacklisted(self):
+        query = MONGO_BLACKLISTED_TOKENS.db.posts.find_one({'token': self.jti})
+        # This might be a bad way of doing it, I'm not shure
+        return bool(query)
 
 class TokenRefresh(Resource):
+    @jwt_refresh_token_required
     def post(self):
-        return {'message': 'Token refresh'}
+        current_user = get_jwt_identity()
+        access_token = create_access_token(identity = current_user)
+        return {'access_token': access_token}
       
-      
+# Don't need this     
 class AllUsers(Resource):
     def get(self):
         return {'message': 'List of users'}

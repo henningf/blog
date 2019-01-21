@@ -3,6 +3,7 @@ from flask import jsonify
 from bson.json_util import dumps
 import json, datetime
 from db import MONGO_POSTS as mongo_posts
+from flask_jwt_extended import jwt_required
 
 """
 blog_posts = [{"ID": "1", "Title": "my first blogpost","Slug": "my-first-blogpost","Body": "<h1>test</h1> <br> <b>test2</b>",
@@ -25,6 +26,7 @@ blog_posts = [{"ID": "1", "Title": "my first blogpost","Slug": "my-first-blogpos
 class BlogPost(Resource):
     """
     Class for blogposts, used to create, update or delete single blogpost.
+    Post and delete is decorated with jwt
     """
     # Create a class to find one slug
     def _find_one_post(self, slug):
@@ -46,7 +48,7 @@ class BlogPost(Resource):
         json_post = json.loads(post_name)
         return json_post, 200 if post_name else 404
 
-
+    @jwt_required
     def post(self):
         """
         This will take a request input of a json, The json needs a Title and a Body key.
@@ -75,6 +77,7 @@ class BlogPost(Resource):
         else:
             return jsonify({'ok': False, 'message': 'Bad request parameters!'}), 400
 
+    @jwt_required
     def delete(self, slug):
         post = self._find_one_post(slug)
         if post is not None:
